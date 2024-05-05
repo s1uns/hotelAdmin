@@ -1,0 +1,64 @@
+{% extends 'home.html' %} {% block content %}
+<div style="margin: 0 auto; width: 300px; text-align: center">
+    <h1 class="">Sign up</h1>
+
+    <form method="post" style="margin-top: 20px">
+        {% csrf_token %}
+        <div>
+            <label for="username">Username:</label><br />
+            {{ form.username }}
+        </div>
+        
+        <div style="margin-top: 10px">
+            <label for="password1">Password:</label><br />
+            {{ form.password1 }}
+        </div>
+
+        <div style="margin-top: 10px">
+            <label for="password2">Repeat password:</label><br />
+            {{ form.password2 }}
+        </div>
+
+        {% if form.errors or form.non_field_errors %}
+        <div style="margin-top: 10px">
+            {% for field in form %} 
+                {{ field.errors }} 
+            {% endfor %}
+        </div>
+        {% endif %}
+        <button
+            type="submit"
+            style="
+                margin-top: 20px;
+                padding: 10px 20px;
+                background-color: #4caf50;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            "
+        >
+            Submit
+        </button>
+    </form>
+
+    <div style="margin-top: 20px">
+        <a
+            onclick="location.href = '/login'"
+            style="color: grey; cursor: pointer"
+            onmouseover="this.style.color='black'; this.style.cursor='pointer';"
+            onmouseout="this.style.color='grey'; this.style.cursor='pointer';"
+            >Already have an account?</a
+        >
+    </div>
+    <div style="margin-top: 20px">
+        <a
+            onclick="location.href = '/'"
+            style="color: grey; cursor: pointer"
+            onmouseover="this.style.color='black'; this.style.cursor='pointer';"
+            onmouseout="this.style.color='grey'; this.style.cursor='pointer';"
+            >Home</a
+        >
+    </div>
+</div>
+{% endblock %}

@@ -57,7 +57,7 @@ next-env.d.ts
 .env
 .venv
 env/
-venv/
+hoteladminvenv/
 ENV/
 env.bak/
 venv.bak/

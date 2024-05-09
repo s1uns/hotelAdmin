@@ -30,3 +30,14 @@ class SignupForm(UserCreationForm):
             'placeholder': 'Repeat your password',
             'class': '',
         }))
+
+class OrderPremiseForm(forms.Form):
+    first_name = forms.CharField(label='First Name')
+    last_name = forms.CharField(label='Last Name')
+    check_in_date = forms.DateField(label='Check-In Date')
+    check_out_date = forms.DateField(label='Check-Out Date')
+
+    def __init__(self, *args, **kwargs):
+        premise_choices = kwargs.pop('premise_choices')
+        super(OrderPremiseForm, self).__init__(*args, **kwargs)
+        self.fields['premise'] = forms.ChoiceField(choices=premise_choices, label='Select Premise')

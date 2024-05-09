@@ -10,11 +10,13 @@
                 max-width: 100%;
                 overflow-x: hidden;
             }
+
             body {
                 font-family: Arial, sans-serif;
                 margin: 0;
                 padding: 0;
             }
+
             header {
                 background-color: #333;
                 width: 100%;
@@ -26,16 +28,20 @@
                 align-items: center;
                 justify-content: space-between;
             }
+
             main {
                 padding: 20px;
             }
+
             form {
                 margin-bottom: 20px;
             }
+
             label {
                 display: block;
                 margin-bottom: 5px;
             }
+
             input[type="text"],
             select,
             input[type="date"] {
@@ -46,6 +52,7 @@
                 border-radius: 4px;
                 box-sizing: border-box;
             }
+
             input[type="submit"],
             button {
                 background-color: #4caf50;
@@ -55,17 +62,21 @@
                 border-radius: 4px;
                 cursor: pointer;
             }
+
             input[type="submit"]:hover,
             button:hover {
                 background-color: #45a049;
             }
+
             button:active {
                 background-color: #1b641f;
             }
+
             #regionSelect {
                 width: 40%;
                 font-size: 32px;
             }
+
             #loginButton {
                 padding: 15px 0px;
                 margin-right: 30px;
@@ -73,12 +84,14 @@
                 height: 50%;
                 font-size: 52px;
             }
+
             #date-time-panel {
                 width: 100%;
                 gap: 3px;
                 display: flex;
                 flex-direction: row;
             }
+
             #date-time-block {
                 width: 100%;
                 display: flex;
@@ -86,7 +99,31 @@
             }
 
             .container {
-                width: 30%;
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                gap: 300px;
+            }
+
+            .premise-inhabitant {
+                display: flex;
+                flex-direction: row;
+                text-align: center;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                gap: 15px;
+                margin-top: 15px;
+            }
+
+            .delete-btn {
+                background-color: rgb(148, 4, 4);
+            }
+            .delete-btn:hover {
+                background-color: rgb(196, 1, 1);
+            }
+            .delete-btn:active {
+                background-color: rgb(144, 0, 0);
             }
         </style>
     </head>
@@ -97,51 +134,43 @@
                 Current Region:
                 <select id="regionSelect">
                     <option value="">Select Region</option>
-                    <option value="Autonomous Republic of Crimea">
-                        Autonomous Republic of Crimea
-                    </option>
-                    <option value="Cherkasy Oblast">Cherkasy Oblast</option>
-                    <option value="Chernihiv Oblast">Chernihiv Oblast</option>
-                    <option value="Chernivtsi Oblast">Chernivtsi Oblast</option>
-                    <option value="Dnipropetrovsk Oblast">
-                        Dnipropetrovsk Oblast
-                    </option>
-                    <option value="Donetsk Oblast">Donetsk Oblast</option>
-                    <option value="Ivano-Frankivsk Oblast">
-                        Ivano-Frankivsk Oblast
-                    </option>
-                    <option value="Kharkiv Oblast">Kharkiv Oblast</option>
-                    <option value="Kherson Oblast">Kherson Oblast</option>
-                    <option value="Khmelnytskyi Oblast">
-                        Khmelnytskyi Oblast
-                    </option>
-                    <option value="Kirovohrad Oblast">Kirovohrad Oblast</option>
-                    <option value="Kyiv Oblast">Kyiv Oblast</option>
-                    <option value="Kyiv City">Kyiv City</option>
-                    <option value="Luhansk Oblast">Luhansk Oblast</option>
-                    <option value="Lviv Oblast">Lviv Oblast</option>
-                    <option value="Mykolaiv Oblast">Mykolaiv Oblast</option>
-                    <option value="Odessa Oblast">Odessa Oblast</option>
-                    <option value="Poltava Oblast">Poltava Oblast</option>
-                    <option value="Rivne Oblast">Rivne Oblast</option>
-                    <option value="Sevastopol">Sevastopol</option>
-                    <option value="Sumy Oblast">Sumy Oblast</option>
-                    <option value="Ternopil Oblast">Ternopil Oblast</option>
-                    <option value="Vinnytsia Oblast">Vinnytsia Oblast</option>
-                    <option value="Volyn Oblast">Volyn Oblast</option>
-                    <option value="Zakarpattia Oblast">
-                        Zakarpattia Oblast
-                    </option>
-                    <option value="Zaporizhzhia Oblast">
-                        Zaporizhzhia Oblast
-                    </option>
-                    <option value="Zhytomyr Oblast">Zhytomyr Oblast</option>
+                    <option value="29">Autonomous Republic of Crimea</option>
+                    <option value="24">Cherkasy Region</option>
+                    <option value="25">Chernihiv Region</option>
+                    <option value="26">Chernivtsi Region</option>
+                    <option value="9">Dnipropetrovsk Region</option>
+                    <option value="28">Donetsk Region</option>
+                    <option value="13">Ivano-Frankivsk Region</option>
+                    <option value="22">Kharkiv Region</option>
+                    <option value="23">Kherson Region</option>
+                    <option value="3">Khmelnytskyi Region</option>
+                    <option value="15">Kirovohrad Region</option>
+                    <option value="14">Kyiv Region</option>
+                    <option value="31">Kyiv City</option>
+                    <option value="16">Luhansk Region</option>
+                    <option value="27">Lviv Region</option>
+                    <option value="17">Mykolaiv Region</option>
+                    <option value="18">Odessa Region</option>
+                    <option value="19">Poltava Region</option>
+                    <option value="5">Rivne Region</option>
+                    <option value="30">Sevastopol</option>
+                    <option value="20">Sumy Region</option>
+                    <option value="21">Ternopil Region</option>
+                    <option value="4">Vinnytsia Region</option>
+                    <option value="8">Volyn Region</option>
+                    <option value="11">Zakarpattia Region</option>
+                    <option value="12">Zaporizhzhia Region</option>
+                    <option value="10">Zhytomyr Region</option>
                 </select>
             </h1>
             {% if user.is_authenticated %}
-            <button id="loginButton" onclick="location.href = '/logout'">Logout</button>
+            <button id="loginButton" onclick="location.href = '/logout'">
+                Logout
+            </button>
             {% else %}
-            <button id="loginButton" onclick="location.href = '/login'">Login</button>
+            <button id="loginButton" onclick="location.href = '/login'">
+                Login
+            </button>
             {% endif %}
         </header>
         <main>{% block content %} {% endblock %}</main>

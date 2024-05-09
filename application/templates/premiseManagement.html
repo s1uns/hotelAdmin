@@ -6,27 +6,14 @@
 {% else %}
 
 {% if available_premises %}
-<form action="/checkin_checkout/" method="post">
-    <label for="premiseSelect">Select Premise:</label>
-    <select name="premise" id="premiseSelect">
-        {% for premise in available_premises %}
-        <option value="{{ premise.id }}">{{ premise.name }}</option>
-        {% endfor %}
-    </select>
-    <input type="submit" value="Check-in" />
-</form>
-{% else %}
-<p>No available premises at the moment.</p>
-{% endif %} {% endif %} {% else %}
-
 <div class="container">
-    <form action="/order_premise/" method="post">
-        <label for="firstName">First Name:</label>
-        <input type="text" id="firstName" name="firstName" />
-        <label for="lastName">Last Name:</label>
-        <input type="text" id="lastName" name="lastName" />
-        <label for="premiseSelect">Select Premise:</label>
-        <select name="premise" id="premiseSelect">
+    <form class="check-in__form" action="/check-in/" method="post">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" />
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" />
+        <label for="premise">Select Premise:</label>
+        <select name="premise" id="premise">
             {% for premise in available_premises %}
             <option value="{{ premise.id }}">
                 {{ premise.name }}
@@ -35,19 +22,84 @@
         </select>
         <div id="date-time-panel">
             <div class="date-time-block">
-                <label for="checkInDate">Check-In Date:</label>
+                <label for="check_in_date">Check-In Date:</label>
                 <input
                     type="date"
-                    id="checkInDate"
-                    name="checkInDate"
+                    id="check_in_date"
+                    name="check_in_date"
                 />
             </div>
             <div class="date-time-block">
-                <label for="checkOutDate">Check-Out Date:</label>
+                <label for="check_out_date">Check-Out Date:</label>
                 <input
                     type="date"
-                    id="checkOutDate"
-                    name="checkOutDate"
+                    id="check_out_date"
+                    name="check_out_date"
+                />
+            </div>
+        </div>
+
+        <input type="submit" value="Order Premise" />
+    </form>
+    <div class="checked-premises">
+        <h1>List of Premise Inhabitants</h1>
+        {% for premise_inhabitant in premise_inhabitants %}
+        <div class="premise-inhabitant">{{ premise_inhabitant }}             
+            <form action="{% url 'check_out' premise_inhabitant.id %}" method="post">
+                {% csrf_token %}
+                <button class="delete-btn" type="submit">Check-Out</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="container">
+    <p>No available premises at the moment.</p>
+    <div class="checked-premises">
+        <h1>List of Premise Inhabitants</h1>
+        {% for premise_inhabitant in premise_inhabitants %}
+        <div class="premise-inhabitant">{{ premise_inhabitant }}             
+            <form action="{% url 'check_out' premise_inhabitant.id %}" method="post">
+                {% csrf_token %}
+                <button class="delete-btn" type="submit">Check-Out</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endif %} {% endif %} {% else %}
+
+<div class="container">
+    <form class="check-in__form" action="/check-in/" method="post">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name"/>
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" />
+        <label for="premise">Select Premise:</label>
+        <select name="premise" id="premise">
+            {% for premise in available_premises %}
+            <option value="{{ premise.id }}">
+                {{ premise.name }}
+            </option>
+            {% endfor %}
+        </select>
+        <div id="date-time-panel">
+            <div class="date-time-block">
+                <label for="check_in_date">Check-In Date:</label>
+                <input
+                    type="date"
+                    id="check_in_date"
+                    name="check_in_date"
+                />
+            </div>
+            <div class="date-time-block">
+                <label for="check_out_date">Check-Out Date:</label>
+                <input
+                    type="date"
+                    id="check_out_date"
+                    name="check_out_date"
                 />
             </div>
         </div>
@@ -55,8 +107,6 @@
         <input type="submit" value="Order Premise" />
     </form>
 </div>
-<div class="checked-premises">
-    
-</div>
+
 {% endif %}
 {% endblock %}

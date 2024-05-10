@@ -109,4 +109,10 @@
 </div>
 
 {% endif %}
+
+{% if alarm_message %}
+    <footer style="background-color: red; position: fixed; top:90%; width: 100%; left: 0; color: white; text-align: center; padding: 40px;font-size: 32px; padding-top: 20px;">
+        {{ alarm_message }}
+    </footer>
+{% endif %}
 {% endblock %}

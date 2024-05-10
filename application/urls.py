@@ -5,6 +5,7 @@ from django.urls import path
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('/?regionId=<int:regionId>', views.home, name='home_with_region'),
     path('login/', auth_views.LoginView.as_view(
         template_name='login.html',
         authentication_form=LoginForm),

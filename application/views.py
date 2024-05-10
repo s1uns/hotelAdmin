@@ -13,13 +13,30 @@ from application.models import Inhabitant, Premise, Premise_Inhabitant
 from .forms import SignupForm
 from django.shortcuts import redirect
 from django.contrib.auth import logout
+from alerts_in_ua import Client as AlertsClient
+import os
+from dotenv import load_dotenv
 
 # Create your views here.
 
-def home(request): 
+def home(request, regionId=0): 
+    print(regionId)
+    alarm_message = ''
+    if(regionId != 0):
+        token = os.getenv("API_TOKEN")
+        alerts_client = AlertsClient(token=token)
+        alert_status = alerts_client.get_air_raid_alert_status(regionId)
+        response_messages = {
+                'A': 'an air alert is active in the entire area',
+                'P': 'partial alarm in districts or communities',
+                'N': ''
+            }
+        alarm_message = response_messages.get(alert_status, 'Unknown status code')
+        print(alarm_message)
+
     available_premises = Premise.objects.filter(premise_inhabitant=None)
     premise_inhabitants = Premise_Inhabitant.objects.all()
-    context={'available_premises': available_premises, "premise_inhabitants": premise_inhabitants}
+    context={'available_premises': available_premises, "premise_inhabitants": premise_inhabitants, 'alarm_message': alarm_message}
     return render(request, "premiseManagement.html", context)
 
 

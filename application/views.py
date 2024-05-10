@@ -2,7 +2,7 @@ from datetime import timedelta, timezone
 from urllib import request
 from django.contrib.auth.decorators import login_required
 from django.db.models import Count
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import TemplateView
@@ -10,33 +10,20 @@ from django.views.decorators.csrf import csrf_exempt
 from datetime import *
 from django.utils import timezone
 from application.models import Inhabitant, Premise, Premise_Inhabitant
+from hotelAdmin import settings
 from .forms import SignupForm
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from alerts_in_ua import Client as AlertsClient
 import os
-from dotenv import load_dotenv
 
-# Create your views here.
 
-def home(request, regionId=0): 
-    print(regionId)
-    alarm_message = ''
-    if(regionId != 0):
-        token = os.getenv("API_TOKEN")
-        alerts_client = AlertsClient(token=token)
-        alert_status = alerts_client.get_air_raid_alert_status(regionId)
-        response_messages = {
-                'A': 'an air alert is active in the entire area',
-                'P': 'partial alarm in districts or communities',
-                'N': ''
-            }
-        alarm_message = response_messages.get(alert_status, 'Unknown status code')
-        print(alarm_message)
 
+def home(request): 
+    
     available_premises = Premise.objects.filter(premise_inhabitant=None)
     premise_inhabitants = Premise_Inhabitant.objects.all()
-    context={'available_premises': available_premises, "premise_inhabitants": premise_inhabitants, 'alarm_message': alarm_message}
+    context={'available_premises': available_premises, "premise_inhabitants": premise_inhabitants}
     return render(request, "premiseManagement.html", context)
 
 
@@ -78,14 +65,16 @@ def check_in_inhabitant(request):
             last_name = "User"
         premise_id = request.POST.get('premise')
         check_in_date = request.POST.get('check_in_date')
-        if(len(check_in_date) == 0 or datetime.strptime(check_in_date, '%Y-%m-%d') < datetime.now()):
+        if not check_in_date or timezone.make_aware(datetime.strptime(check_in_date, '%Y-%m-%d')) < timezone.now():
             check_in_date = timezone.now()
         else:
-            check_in_date = datetime.strptime(check_in_date, '%Y-%m-%d')
+            check_in_date = timezone.make_aware(datetime.strptime(check_in_date, '%Y-%m-%d'))
 
         check_out_date = request.POST.get('check_out_date')
-        if(len(check_out_date) == 0 or datetime.strptime(check_out_date, '%Y-%m-%d') < check_in_date):
+        if not check_out_date or timezone.make_aware(datetime.strptime(check_out_date, '%Y-%m-%d')) < check_in_date:
             check_out_date = check_in_date + timedelta(1)
+        else:
+            check_out_date = timezone.make_aware(datetime.strptime(check_out_date, '%Y-%m-%d'))
 
         inhabitant = Inhabitant.objects.create(first_name=first_name, last_name=last_name)
         premise = Premise.objects.get(id=premise_id)
@@ -97,10 +86,8 @@ def check_in_inhabitant(request):
             checkOut_date=check_out_date
         )
 
-        # Optionally, you can redirect to a success URL
         return redirect('success-in')
     else:
-        # Handle GET requests or redirect to an error page if needed
         pass
 
 def check_out(request, premise_inhabitant_id):
@@ -109,6 +96,17 @@ def check_out(request, premise_inhabitant_id):
     premise_inhabitant.delete()
     inhabitant.delete()
     return redirect('success-out')
+
+def get_alarm(request, region_id=0):
+    token = settings.API_TOKEN
+    alarm_message = ''
+    if(region_id != 0):
+        token = os.getenv("API_TOKEN")
+        alerts_client = AlertsClient(token=token)
+        alert_status = alerts_client.get_air_raid_alert_status(region_id)
+
+    return JsonResponse(alert_status.__str__(), status=200, safe=False)
+
 
 
 class SuccessCheckInView(TemplateView):

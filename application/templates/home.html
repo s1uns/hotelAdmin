@@ -78,11 +78,11 @@
             }
 
             #loginButton {
-                padding: 15px 0px;
+                padding: 10px 30px;
                 margin-right: 30px;
-                width: 20%;
                 height: 50%;
-                font-size: 52px;
+                font-size: 32px;
+                width: 158px;
             }
 
             #date-time-panel {
@@ -132,8 +132,11 @@
             <h1>Hotel Administrator Application by Illia Teliuk</h1>
             <h1>
                 Current Region:
-                <form id="regionForm" action="/" method="get">
-                    <select id="regionSelect" name="regionId" onchange="updateAction()">
+                <select
+                    id="regionSelect"
+                    name="regionId"
+                    onchange="updateAction()"
+                >
                     <option value="0">Select Region</option>
                     <option value="29">Autonomous Republic of Crimea</option>
                     <option value="24">Cherkasy Region</option>
@@ -163,7 +166,6 @@
                     <option value="12">Zaporizhzhia Region</option>
                     <option value="10">Zhytomyr Region</option>
                 </select>
-            </form>
             </h1>
             {% if user.is_authenticated %}
             <button id="loginButton" onclick="location.href = '/logout'">
@@ -178,11 +180,55 @@
         <main>{% block content %} {% endblock %}</main>
         <script>
             function updateAction() {
-                var regionId = document.getElementById("regionSelect").value;
-                var actionUrl = "/?regionId=" + regionId;
-                console.log(actionUrl)
-                document.getElementById("regionForm").action = actionUrl;
-                document.getElementById("regionForm").submit();
+                let oldFooter = document.querySelector("footer");
+                console.log(oldFooter);
+                if (oldFooter) {
+                    oldFooter.parentNode.removeChild(oldFooter);
+                }
+
+                oldFooter = null;
+
+                let select = document.getElementById("regionSelect");
+                let token = "";
+                let url = "";
+                var regionId = select.value;
+                const baseUrl =
+                    "https://api.alerts.in.ua/v1/iot/active_air_raid_alerts/{regionId}.json?token={token}";
+
+                if (regionId != 0) {
+                    fetch(`get-alarm/${regionId}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                            const footer = document.createElement("footer");
+
+                            if (data[0] == "a") {
+                                footer.style.backgroundColor = "red";
+                            } else if (data[0] == "p") {
+                                footer.style.backgroundColor = "yellow";
+                            } else {
+                                footer.style.backgroundColor = "green";
+                            }
+                            footer.style.position = "fixed";
+                            footer.style.top = "90%";
+                            footer.style.width = "100%";
+                            footer.style.left = "0";
+                            footer.style.color = "white";
+                            footer.style.textAlign = "center";
+                            footer.style.padding = "40px";
+                            footer.style.fontSize = "32px";
+                            footer.style.paddingTop = "20px";
+
+                            let selectedOptionText =
+                                select.options[select.selectedIndex].innerHTML;
+
+                            footer.textContent =
+                                selectedOptionText ||
+                                "Default text if data.text is not provided";
+
+                            document.body.appendChild(footer);
+                        })
+                        .catch((error) => console.error(error));
+                }
             }
         </script>
     </body>

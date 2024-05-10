@@ -25,4 +25,4 @@ class Premise_Inhabitant(models.Model):
     checkOut_date = models.DateTimeField(default=timezone.now() + timedelta(1))
 
     def __str__(self):
-        return '{inhabitant} checked-in the {premise} from {checkIn} till {checkOut}'.format(inhabitant=self.inhabitant.__str__(), premise=self.premise.__str__(),  checkIn=self.checkIn_date.strftime("%d %m %Y"), checkOut=self.checkOut_date.strftime("%d %m %Y"))
+        return '{inhabitant} checked-in the {premise} from {checkIn} to {checkOut}'.format(inhabitant=self.inhabitant.__str__(), premise=self.premise.__str__(),  checkIn=self.checkIn_date.strftime("%d %m %Y"), checkOut=self.checkOut_date.strftime("%d %m %Y"))
